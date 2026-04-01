@@ -1,9 +1,9 @@
 ## Get Started
 
 1. Add or edit `.md` files in the `.slides/` directory
-2. Run `node build-slides.js` to rebuild
-3. Or run `node build-slides.js --watch` for auto-rebuild
-4. Preview `slides.html` in Cursor's Simple Browser
+2. Serve this folder locally (`python3 -m http.server`)
+3. Open `slides.html` in your browser or Cursor's Simple Browser
+4. Refresh to pick up new slide files
 
 ### Name files with number prefixes to control order.
 

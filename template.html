@@ -100,6 +100,16 @@
     opacity: 0;
     transform: translateY(-28px);
   }
+  .status {
+    width: 100%;
+    max-width: var(--slide-max);
+    padding: 48px 64px;
+    color: var(--dim);
+    font-size: 18px;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .status.error { color: var(--accent2); }
 
   .slide h1 {
     font-family: 'DM Serif Display', serif;
@@ -214,7 +224,7 @@
 <body>
 <div class="grain"></div>
 <div class="topbar">
-  <div class="title"><!-- __TITLE__ --></div>
+  <div class="title">Project Overview</div>
   <div class="nav">
     <button onclick="navigate(-1)" aria-label="Previous">&#8249;</button>
     <div class="counter"><span id="cur">1</span> / <span id="total">0</span></div>
@@ -226,8 +236,74 @@
 <div class="hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate</div>
 
 <script>
-// Injected by build script as JSON:
-const SLIDES_RAW = /* __SLIDES_JSON__ */[];
+const SLIDES_DIR = '.slides/';
+const SLIDES_EXT = '.md';
+const stage = document.getElementById('stage');
+const curEl = document.getElementById('cur');
+const totalEl = document.getElementById('total');
+const progressEl = document.getElementById('progress');
+let slidesRaw = [];
+let current = 0;
+
+function setStatus(message, isError) {
+  stage.innerHTML = '<div class="status' + (isError ? ' error' : '') + '">' + message + '</div>';
+}
+
+function normalizeSlidePath(href) {
+  if (!href) return null;
+  const cleaned = href.split('#')[0].split('?')[0];
+  if (!cleaned || cleaned === '../' || cleaned.endsWith('/')) return null;
+  if (!cleaned.toLowerCase().endsWith(SLIDES_EXT)) return null;
+  if (/^(https?:)?\/\//i.test(cleaned)) return null;
+  if (cleaned.startsWith('/')) return cleaned;
+  if (cleaned.startsWith(SLIDES_DIR)) return cleaned;
+  return SLIDES_DIR + cleaned.replace(/^\.?\//, '');
+}
+
+function slideSort(a, b) {
+  return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+}
+
+function discoverFromDirectoryListing(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const files = Array.from(doc.querySelectorAll('a[href]'))
+    .map((a) => normalizeSlidePath(a.getAttribute('href')))
+    .filter(Boolean);
+  return Array.from(new Set(files)).sort(slideSort);
+}
+
+async function discoverSlideFiles() {
+  const listingRes = await fetch(SLIDES_DIR, { cache: 'no-store' });
+  if (listingRes.ok) {
+    const discovered = discoverFromDirectoryListing(await listingRes.text());
+    if (discovered.length > 0) return discovered;
+  }
+
+  const manifestRes = await fetch(SLIDES_DIR + 'slides.json', { cache: 'no-store' });
+  if (manifestRes.ok) {
+    const manifest = await manifestRes.json();
+    if (Array.isArray(manifest)) {
+      return manifest
+        .map((entry) => (typeof entry === 'string' ? normalizeSlidePath(entry) : null))
+        .filter(Boolean)
+        .sort(slideSort);
+    }
+  }
+
+  throw new Error('No slides found. Ensure .slides/ is served with directory listing or add .slides/slides.json.');
+}
+
+async function loadSlides() {
+  const files = await discoverSlideFiles();
+  const markdown = await Promise.all(
+    files.map(async (file) => {
+      const res = await fetch(file, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to load ' + file);
+      return res.text();
+    })
+  );
+  return markdown;
+}
 
 // ── Tiny markdown → HTML parser ──
 function md(src) {
@@ -309,23 +385,20 @@ function md(src) {
   return html;
 }
 
-// ── Render slides ──
-let current = 0;
-const stage = document.getElementById('stage');
-
-SLIDES_RAW.forEach((src, idx) => {
-  const div = document.createElement('div');
-  div.className = 'slide' + (idx === 0 ? ' active' : '');
-  div.innerHTML = md(src);
-  stage.appendChild(div);
-});
-
-document.getElementById('total').textContent = SLIDES_RAW.length;
-updateUI();
+function renderSlides() {
+  stage.innerHTML = '';
+  slidesRaw.forEach((src, idx) => {
+    const div = document.createElement('div');
+    div.className = 'slide' + (idx === 0 ? ' active' : '');
+    div.innerHTML = md(src);
+    stage.appendChild(div);
+  });
+}
 
 function navigate(dir) {
+  if (slidesRaw.length === 0) return;
   const next = current + dir;
-  if (next < 0 || next >= SLIDES_RAW.length) return;
+  if (next < 0 || next >= slidesRaw.length) return;
   const els = stage.querySelectorAll('.slide');
   const prev = current;
   els[prev].classList.remove('active');
@@ -337,9 +410,11 @@ function navigate(dir) {
 }
 
 function updateUI() {
-  document.getElementById('cur').textContent = current + 1;
-  document.getElementById('progress').style.width =
-    ((current + 1) / SLIDES_RAW.length * 100) + '%';
+  totalEl.textContent = slidesRaw.length;
+  curEl.textContent = slidesRaw.length === 0 ? 0 : current + 1;
+  progressEl.style.width = slidesRaw.length === 0
+    ? '0%'
+    : ((current + 1) / slidesRaw.length * 100) + '%';
 }
 
 document.addEventListener('keydown', e => {
@@ -348,9 +423,30 @@ document.addEventListener('keydown', e => {
 });
 
 stage.addEventListener('click', e => {
+  if (slidesRaw.length === 0) return;
   const rect = stage.getBoundingClientRect();
   e.clientX < rect.left + rect.width / 2 ? navigate(-1) : navigate(1);
 });
+
+async function boot() {
+  setStatus('Loading slides...', false);
+  try {
+    slidesRaw = await loadSlides();
+    if (slidesRaw.length === 0) throw new Error('No slides found in .slides/.');
+    current = 0;
+    renderSlides();
+    updateUI();
+  } catch (err) {
+    const help = window.location.protocol === 'file:'
+      ? ' Open this deck through a local web server (for example: python3 -m http.server).'
+      : '';
+    setStatus((err && err.message ? err.message : 'Failed to load slides.') + help, true);
+    updateUI();
+    console.error(err);
+  }
+}
+
+boot();
 </script>
 </body>
 </html>
