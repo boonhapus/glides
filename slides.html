@@ -12,24 +12,29 @@
     --font-display: 'DM Serif Display', serif;
     --font-body: 'Outfit', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
-    --bg: #0c0c0f;
-    --fg: #e8e6e1;
-    --dim: #6b6966;
-    --body: #c4c1ba;
-    --accent: #f0c050;
-    --accent2: #e06848;
-    --code-bg: #1a1a20;
-    --code-border: #28282f;
+    /* Cursor-like editor canvas + neutral text */
+    --bg: #1e1e1e;
+    --fg: #d4d4d4;
+    --dim: #858585;
+    --body: #b3b3b3;
+    /* Adobe-inspired tertiary (violet) + coral accent */
+    --accent: #c9a3ff;
+    --accent2: #ff6b6b;
+    --link: #6db3ff;
+    --link-hover: #9cceff;
+    --link-visited: #c4a8ff;
+    --code-bg: #252526;
+    --code-border: #3c3c3c;
     --slide-max: 960px;
-    --topbar-border: #1e1e24;
-    --surface: #18181e;
-    --surface-hover: #22222a;
-    --surface-active: #2a2a34;
-    --nav-border: #2a2a32;
-    --nav-border-hover: #3a3a44;
-    --hint-fg: #3a3a42;
-    --hint-kbd-bg: #18181e;
-    --hint-kbd-border: #2a2a32;
+    --topbar-border: #2d2d2d;
+    --surface: #252526;
+    --surface-hover: #2a2d2e;
+    --surface-active: #323436;
+    --nav-border: #3c3c3c;
+    --nav-border-hover: #4a4a4a;
+    --hint-fg: #6a6a6a;
+    --hint-kbd-bg: #252526;
+    --hint-kbd-border: #3c3c3c;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -162,6 +167,20 @@
     color: var(--body);
     margin-bottom: 16px;
   }
+  .slide a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: .15em;
+    text-decoration-thickness: max(1px, 0.06em);
+    transition: color .15s ease;
+  }
+  .slide a:hover { color: var(--link-hover); }
+  .slide a:visited { color: var(--link-visited); }
+  .slide a:focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
   .slide ul, .slide ol { padding-left: 24px; margin-bottom: 16px; }
   .slide li {
     font-size: 19px;
@@ -207,8 +226,21 @@
     border-left: 3px solid var(--accent);
     padding: 4px 0 4px 20px;
     margin-bottom: 16px;
+    text-wrap: pretty;
   }
   .slide blockquote p { color: var(--dim); font-style: italic; }
+  .slide:has(.slide-img) {
+    text-align: center;
+  }
+  .slide .slide-img {
+    display: block;
+    max-width: 160px;
+    max-height: 160px;
+    width: auto;
+    height: auto;
+    margin: 0 auto 32px;
+    object-fit: contain;
+  }
   .slide hr {
     border: none;
     height: 1px;
@@ -239,6 +271,136 @@
     border-radius: 4px; padding: 1px 6px;
     font-family: var(--font-mono); font-size: 10px; margin: 0 1px;
   }
+
+  .topbar .nav button.nav-print {
+    width: auto;
+    min-width: 32px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-family: var(--font-body);
+    font-weight: 500;
+  }
+  .topbar .nav button.nav-print:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+  }
+
+  @page {
+    size: landscape;
+    margin: 14mm;
+  }
+
+  /*
+   * PDF / print: use a self-contained light theme. Many users print without
+   * “Background graphics”, which strips body --bg and leaves --fg text illegible
+   * on white. Screen flex layout also confuses some print engines.
+   */
+  @media print {
+    html {
+      color-scheme: light;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    body {
+      display: block !important;
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: visible !important;
+      background: #ffffff !important;
+      color: #1a1a1a !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .grain,
+    .topbar,
+    .progress,
+    .hint {
+      display: none !important;
+    }
+    .stage {
+      display: block !important;
+      flex: none !important;
+      overflow: visible !important;
+      position: static !important;
+      width: 100% !important;
+      max-width: none !important;
+      min-height: 0 !important;
+      align-items: unset !important;
+      justify-content: unset !important;
+    }
+    .slide {
+      position: relative !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto;
+      box-sizing: border-box;
+      width: 100% !important;
+      max-width: var(--slide-max) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      padding: 48px 64px !important;
+      page-break-after: always;
+      break-after: page;
+      transition: none !important;
+    }
+    .slide:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .slide.exit-up:not(.active) {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .slide h1 {
+      background: none !important;
+      -webkit-background-clip: unset !important;
+      background-clip: unset !important;
+      -webkit-text-fill-color: unset !important;
+      color: #1a1a1a !important;
+    }
+    .slide h2 { color: #1a1a1a !important; }
+    .slide h3 { color: #4a3077 !important; }
+    .slide p,
+    .slide li { color: #333333 !important; }
+    .slide li::marker { color: #4a3077 !important; }
+    .slide a {
+      color: #0b57d0 !important;
+      text-decoration: underline !important;
+    }
+    .slide a:visited { color: #5c2d91 !important; }
+    .slide strong { color: #1a1a1a !important; }
+    .slide em { color: #5c2d91 !important; font-style: italic !important; }
+    .slide code {
+      background: #f0f3f5 !important;
+      border: 1px solid #c9d1d9 !important;
+      color: #24292f !important;
+    }
+    .slide pre {
+      background: #f6f8fa !important;
+      border: 1px solid #d0d7de !important;
+    }
+    .slide pre code {
+      color: #24292f !important;
+    }
+    /* github-dark tokens on white: flatten to one readable color */
+    .slide pre code.hljs,
+    .slide pre code.hljs * {
+      background: transparent !important;
+      font-style: normal !important;
+      font-weight: 400 !important;
+      color: #24292f !important;
+    }
+    .slide blockquote { border-left-color: #4a3077 !important; }
+    .slide blockquote p { color: #57606a !important; }
+    .slide hr {
+      background: #d0d7de !important;
+      height: 1px !important;
+    }
+    .slide .slide-img {
+      max-width: 200px !important;
+      max-height: 200px !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -249,11 +411,12 @@
     <button onclick="navigate(-1)" aria-label="Previous">&#8249;</button>
     <div class="counter"><span id="cur">1</span> / <span id="total">0</span></div>
     <button onclick="navigate(1)" aria-label="Next">&#8250;</button>
+    <button type="button" class="nav-print" id="print-pdf-btn" onclick="printDeck()" aria-label="Save as PDF" disabled>PDF</button>
   </div>
 </div>
 <div class="stage" id="stage"></div>
 <div class="progress"><div class="progress-inner" id="progress"></div></div>
-<div class="hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate</div>
+<div class="hint" id="hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate · right-click slide to edit source</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js" crossorigin="anonymous"></script>
 <script>
@@ -264,6 +427,7 @@ const CONFIG_BASENAME = '00-configuration.md';
 const FRONTMATTER_STYLE_KEYS = new Set([
   'font-display', 'font-body', 'font-mono',
   'bg', 'fg', 'dim', 'body', 'accent', 'accent2',
+  'link', 'link-hover', 'link-visited',
   'code-bg', 'code-border', 'slide-max',
   'topbar-border', 'surface', 'surface-hover', 'surface-active',
   'nav-border', 'nav-border-hover',
@@ -272,13 +436,28 @@ const FRONTMATTER_STYLE_KEYS = new Set([
 
 /** Persists last viewed slide (0-based index) across refresh; keyed by path so multiple decks on one origin stay separate. */
 const LAST_SLIDE_STORAGE_KEY = 'glides:lastSlideIndex:' + (location.pathname || '/');
+/** Repo root when using Live Preview (`http://localhost`); set from YAML, ?workspace=, or prompt/localStorage. */
+const WORKSPACE_ROOT_STORAGE_KEY = 'glides:workspaceRoot';
 const stage = document.getElementById('stage');
 const curEl = document.getElementById('cur');
 const totalEl = document.getElementById('total');
 const progressEl = document.getElementById('progress');
 const deckTitleEl = document.getElementById('deck-title');
+const hintEl = document.getElementById('hint');
+const hintDefaultHtml = hintEl ? hintEl.innerHTML : '';
+const printPdfBtn = document.getElementById('print-pdf-btn');
 let slidesRaw = [];
+/** Same length as slidesRaw: fetch path for each slide (e.g. `.slides/01-intro.md`). */
+let slidePaths = [];
+/** Absolute repo root from `00-configuration.md` frontmatter `workspace` (optional). */
+let deckWorkspaceRoot = null;
 let current = 0;
+let isReloading = false;
+let reloadDebounceTimer = null;
+/** Avoid reload racing with initial `boot()`. */
+let initialBootFinished = false;
+/** Only auto-reload after the user has left the tab at least once (avoids duplicate fetch on first focus). */
+let previewEverBackgrounded = false;
 
 function readSavedSlideIndex() {
   try {
@@ -300,6 +479,33 @@ function persistSlideIndex() {
 
 function setStatus(message, isError) {
   stage.innerHTML = '<div class="status' + (isError ? ' error' : '') + '">' + message + '</div>';
+  syncPrintPdfButton();
+}
+
+function syncPrintPdfButton() {
+  if (!printPdfBtn) return;
+  const canPrint = slidesRaw.length > 0 && !stage.querySelector('.status.error');
+  printPdfBtn.disabled = !canPrint;
+}
+
+async function printDeck() {
+  if (!printPdfBtn || printPdfBtn.disabled) return;
+  try {
+    window.focus();
+  } catch (e) { /* ignore */ }
+  // Cursor/VS Code Live Preview uses a sandboxed iframe; window.print() often does nothing there.
+  if (window.self !== window.top) {
+    const url = location.href;
+    const copied = await copyPathToClipboard(url);
+    flashHintMessage(
+      copied
+        ? 'Deck URL copied — paste into Chrome or Edge, load the page, click PDF again. In the print dialog choose Save as PDF; you pick the folder and filename.'
+        : 'For PDF, open this URL in Chrome or Edge (not the editor preview): ' + url + ' — then PDF → Save as PDF (you choose where it saves).',
+      false,
+      10000
+    );
+  }
+  window.print();
 }
 
 function basenameFromPath(path) {
@@ -406,16 +612,216 @@ function applyDeckMeta(meta) {
   }
 }
 
+function normalizeWorkspaceRoot(root) {
+  if (!root || typeof root !== 'string') return '';
+  return root.replace(/\\/g, '/').replace(/\/+$/, '');
+}
+
+/** From a file: page location, return absolute path with forward slashes (e.g. /home/x or C:/x). */
+function fileUrlToFsPath(fileUrl) {
+  try {
+    const u = typeof fileUrl === 'string' ? new URL(fileUrl) : fileUrl;
+    if (u.protocol !== 'file:') return null;
+    let p = u.pathname || '';
+    try {
+      p = decodeURIComponent(p);
+    } catch (e) { /* keep raw */ }
+    if (/^\/[a-zA-Z]:\//.test(p)) {
+      p = p.slice(1);
+    }
+    return p.replace(/\//g, '/');
+  } catch (e) {
+    return null;
+  }
+}
+
+function joinWorkspaceRootAndRel(root, relSlidePath) {
+  const r = normalizeWorkspaceRoot(root);
+  const rel = String(relSlidePath || '').replace(/\\/g, '/').replace(/^\.?\/+/, '');
+  if (!r || !rel) return null;
+  return (r + '/' + rel).replace(/\/+/g, '/');
+}
+
+function workspaceRootFromQuery() {
+  try {
+    const q = new URLSearchParams(location.search).get('workspace');
+    if (q == null || !String(q).trim()) return null;
+    const s = normalizeWorkspaceRoot(String(q).trim());
+    return s.length ? s : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function readStoredWorkspaceRoot() {
+  try {
+    const s = localStorage.getItem(WORKSPACE_ROOT_STORAGE_KEY);
+    if (s == null || !String(s).trim()) return null;
+    const n = normalizeWorkspaceRoot(String(s).trim());
+    return n.length ? n : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function persistStoredWorkspaceRoot(root) {
+  const r = normalizeWorkspaceRoot(root);
+  if (!r) return;
+  try {
+    localStorage.setItem(WORKSPACE_ROOT_STORAGE_KEY, r);
+  } catch (e) { /* quota / private mode */ }
+}
+
+/** Absolute filesystem path for a slide fetch path, or null if unknown (http without workspace). */
+function resolveAbsoluteSlidePath(relSlidePath) {
+  if (location.protocol === 'file:') {
+    try {
+      const u = new URL(relSlidePath, location.href);
+      return fileUrlToFsPath(u);
+    } catch (e) {
+      return null;
+    }
+  }
+  const fromQuery = workspaceRootFromQuery();
+  if (fromQuery) persistStoredWorkspaceRoot(fromQuery);
+  const fromYaml = deckWorkspaceRoot && normalizeWorkspaceRoot(deckWorkspaceRoot);
+  const fromStore = readStoredWorkspaceRoot();
+  const root = fromQuery || fromYaml || fromStore || null;
+  if (!root) return null;
+  return joinWorkspaceRootAndRel(root, relSlidePath);
+}
+
+/**
+ * Opens via OS‑registered URL handler (same family as CLI “open file in Cursor/VS Code”).
+ * Live Preview cannot run extension commands from page JS; this is the supported bridge.
+ */
+function flashHintMessage(message, isError, durationMs) {
+  if (!hintEl) return;
+  hintEl.innerHTML = '';
+  hintEl.textContent = message;
+  if (isError) hintEl.style.color = 'var(--accent2)';
+  const ms = durationMs != null ? durationMs : 5000;
+  window.setTimeout(() => {
+    hintEl.innerHTML = hintDefaultHtml;
+    hintEl.style.color = '';
+  }, ms);
+}
+
+function copyPathWithExecCommand(text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function copyPathToClipboard(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext && typeof navigator.clipboard.writeText === 'function') {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) { /* fall through */ }
+  return copyPathWithExecCommand(text);
+}
+
+async function openCurrentSlideSource() {
+  if (slidesRaw.length === 0 || !slidePaths.length || current < 0 || current >= slidePaths.length) return;
+  if (stage.querySelector('.status')) return;
+
+  const rel = slidePaths[current];
+  let abs = resolveAbsoluteSlidePath(rel);
+
+  if (!abs) {
+    const guess = readStoredWorkspaceRoot() || '';
+    const msg =
+      'Open slide in Cursor: paste the absolute path to the folder that contains `.slides`\n' +
+      '(example on Windows: C:\\\\work\\\\cursor\\\\glides)';
+    const input = window.prompt(msg, guess);
+    if (input != null && String(input).trim()) {
+      persistStoredWorkspaceRoot(String(input).trim());
+      abs = joinWorkspaceRootAndRel(readStoredWorkspaceRoot(), rel);
+    }
+  }
+
+  if (abs) {
+    const copied = await copyPathToClipboard(abs);
+    flashHintMessage(
+      copied
+        ? 'Path copied — Quick Open (Ctrl+P or Cmd+P), paste, Enter → ' + basenameFromPath(rel)
+        : 'Could not copy path. Try Quick Open and open: ' + rel,
+      !copied
+    );
+    return;
+  }
+
+  const copyRel = rel.replace(/\\/g, '/');
+  const copied = await copyPathToClipboard(copyRel);
+  flashHintMessage(
+    copied
+      ? 'Path copied: ' + copyRel + ' — add workspace: in 00-configuration.md (`workspace: …`) or paste the repo root when prompted on right-click.'
+      : 'Could not copy path. Add `workspace` to 00-configuration.md (repo root). File: ' + copyRel,
+    !copied
+  );
+}
+
+function scheduleReloadDebounced() {
+  if (reloadDebounceTimer != null) window.clearTimeout(reloadDebounceTimer);
+  reloadDebounceTimer = window.setTimeout(() => {
+    reloadDebounceTimer = null;
+    reloadSlides();
+  }, 320);
+}
+
+/** Re-fetch markdown and re-render; keeps current index clamped. */
+async function reloadSlides() {
+  if (isReloading || !initialBootFinished) return;
+  isReloading = true;
+  const prev = current;
+  try {
+    const entries = await loadSlideEntries();
+    if (entries.length === 0) return;
+    processLoadedEntries(entries);
+    if (slidesRaw.length === 0) return;
+    current = Math.max(0, Math.min(prev, slidesRaw.length - 1));
+    renderSlides();
+    updateUI();
+    persistSlideIndex();
+  } catch (err) {
+    console.error(err);
+    flashHintMessage('Could not reload slides.', true);
+  } finally {
+    isReloading = false;
+  }
+}
+
 /** Build slide markdown strings and apply 00-configuration frontmatter. */
 function processLoadedEntries(entries) {
   slidesRaw = [];
+  slidePaths = [];
+  deckWorkspaceRoot = null;
   for (let e = 0; e < entries.length; e++) {
     const { path, text } = entries[e];
+    slidePaths.push(path);
     if (isConfigSlidePath(path)) {
       const { meta, body } = splitFrontmatter(text);
       if (meta != null) {
         try {
-          applyDeckMeta(parseFrontmatterYaml(meta));
+          const parsed = parseFrontmatterYaml(meta);
+          if (parsed.workspace != null && String(parsed.workspace).trim()) {
+            deckWorkspaceRoot = normalizeWorkspaceRoot(String(parsed.workspace).trim());
+            persistStoredWorkspaceRoot(deckWorkspaceRoot);
+          }
+          applyDeckMeta(parsed);
         } catch (err) {
           console.warn('Frontmatter parse failed for ' + path, err);
         }
@@ -481,7 +887,9 @@ async function discoverSlideFiles() {
   const listingRes = await fetch(SLIDES_DIR, { cache: 'no-store' });
   if (listingRes.ok) {
     const discovered = discoverFromDirectoryListing(await listingRes.text());
-    if (discovered.length > 0) return discovered;
+    if (discovered.length > 0) {
+      return discovered;
+    }
   }
 
   const manifestRes = await fetch(SLIDES_DIR + 'slides.json', { cache: 'no-store' });
@@ -514,6 +922,13 @@ function escHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/** Avoid RangeError / huge allocations when escaping megabyte-class strings during half-written edits. */
+function escHtmlTrunc(s, maxLen) {
+  const m = maxLen == null ? Infinity : maxLen;
+  if (s.length <= m) return escHtml(s);
+  return escHtml(s.slice(0, m)) + '\n…';
+}
+
 function safeLangClass(lang) {
   return String(lang).replace(/[^a-z0-9_-]/gi, '');
 }
@@ -522,15 +937,29 @@ function safeLangClass(lang) {
 function formatFencedCodeBlock(code, langRaw) {
   const esc = escHtml;
   const lang = (langRaw || '').trim().toLowerCase();
+  /** Unclosed fences while editing pass the rest of the slide as "code"; highlightAuto on that is what freezes the UI. */
+  const HL_AUTO_MAX = 12000;
+  /** Skip Highlight.js on huge blocks (memory / "Invalid string length" from output or esc). */
+  const HL_KNOWN_MAX = 120000;
+  const CODE_ESC_HTML_MAX = 350000;
+  if (code.length > CODE_ESC_HTML_MAX) {
+    return '<pre><code>' + escHtmlTrunc(code, 200000) + ' (code block truncated for preview)</code></pre>';
+  }
   if (typeof hljs === 'undefined') {
     return '<pre><code>' + esc(code) + '</code></pre>';
   }
   if (lang && hljs.getLanguage(lang)) {
+    if (code.length > HL_KNOWN_MAX) {
+      return '<pre><code>' + esc(code) + '</code></pre>';
+    }
     try {
       const { value } = hljs.highlight(code, { language: lang, ignoreIllegals: true });
       const cls = safeLangClass(lang);
       return '<pre><code class="hljs language-' + cls + '">' + value + '</code></pre>';
     } catch (e) { /* fall through */ }
+  }
+  if (code.length > HL_AUTO_MAX) {
+    return '<pre><code>' + esc(code) + '</code></pre>';
   }
   try {
     const { value, language } = hljs.highlightAuto(code);
@@ -543,12 +972,30 @@ function formatFencedCodeBlock(code, langRaw) {
 
 // ── Tiny markdown → HTML parser ──
 function md(src) {
+  const MD_INPUT_MAX = 500000;
+  if (src.length > MD_INPUT_MAX) {
+    return '<p><em>Slide is very large; preview truncated.</em></p><pre><code>' +
+      escHtmlTrunc(src, 200000) + ' (truncated)</code></pre>';
+  }
   let html = '';
-  const lines = src.split('\n');
+  /** CRLF leaves stray `\r` on “lines”; `$` in heading regex then fails and /^#\\s/ traps the same line in paragraph loop without advancing i → freeze. */
+  const lines = src.split(/\r\n|\n|\r/);
   let i = 0;
   const esc = escHtml;
   const inline = s => {
+    const imgs = [];
+    s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, urlRaw) => {
+      const url = String(urlRaw).trim().split(/\s+/)[0];
+      const id = imgs.length;
+      imgs.push(
+        '<img class="slide-img" src="' + esc(url) + '" alt="' + esc(alt.trim()) + '">'
+      );
+      return '{{IMG' + id + '}}';
+    });
     s = esc(s);
+    for (let i = 0; i < imgs.length; i++) {
+      s = s.replace('{{IMG' + i + '}}', imgs[i]);
+    }
     s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
     s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
@@ -575,11 +1022,12 @@ function md(src) {
       continue;
     }
 
-    // Headings
-    const hMatch = line.match(/^(#{1,3})\s+(.+)/);
+    // Headings (allow empty title: bare ### or ### only-trailing-space — avoids infinite loop with paragraph guard /^#{1,3}\\s/)
+    const hMatch = line.match(/^(#{1,3})(?:\s+(.*))?$/);
     if (hMatch) {
       const lvl = hMatch[1].length;
-      html += '<h' + lvl + '>' + inline(hMatch[2]) + '</h' + lvl + '>';
+      const raw = hMatch[2] != null ? hMatch[2] : '';
+      html += '<h' + lvl + '>' + inline(raw.trim()) + '</h' + lvl + '>';
       i++; continue;
     }
 
@@ -631,8 +1079,13 @@ function renderSlides() {
   stage.innerHTML = '';
   slidesRaw.forEach((src, idx) => {
     const div = document.createElement('div');
-    div.className = 'slide' + (idx === 0 ? ' active' : '');
-    div.innerHTML = md(src);
+    div.className = 'slide' + (idx === current ? ' active' : '');
+    try {
+      div.innerHTML = md(src);
+    } catch (e) {
+      const msg = e && e.message ? String(e.message) : String(e);
+      div.innerHTML = '<div class="status error">' + escHtml(msg) + '</div>';
+    }
     stage.appendChild(div);
   });
 }
@@ -673,6 +1126,7 @@ function updateUI() {
   progressEl.style.width = slidesRaw.length === 0
     ? '0%'
     : ((current + 1) / slidesRaw.length * 100) + '%';
+  syncPrintPdfButton();
 }
 
 document.addEventListener('keydown', e => {
@@ -684,6 +1138,22 @@ stage.addEventListener('click', e => {
   if (slidesRaw.length === 0) return;
   const rect = stage.getBoundingClientRect();
   e.clientX < rect.left + rect.width / 2 ? navigate(-1) : navigate(1);
+});
+
+stage.addEventListener('contextmenu', e => {
+  if (slidesRaw.length === 0) return;
+  if (stage.querySelector('.status')) return;
+  e.preventDefault();
+  void openCurrentSlideSource();
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') previewEverBackgrounded = true;
+  if (document.visibilityState === 'visible' && previewEverBackgrounded) scheduleReloadDebounced();
+});
+
+window.addEventListener('focus', () => {
+  if (previewEverBackgrounded && document.visibilityState === 'visible') scheduleReloadDebounced();
 });
 
 async function boot() {
@@ -705,6 +1175,8 @@ async function boot() {
     setStatus((err && err.message ? err.message : 'Failed to load slides.') + help, true);
     updateUI();
     console.error(err);
+  } finally {
+    initialBootFinished = true;
   }
 }
 
