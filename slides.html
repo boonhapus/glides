@@ -4,23 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Slides</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" crossorigin="anonymous">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap');
 
   :root {
+    --font-display: 'DM Serif Display', serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
     --bg: #0c0c0f;
     --fg: #e8e6e1;
     --dim: #6b6966;
+    --body: #c4c1ba;
     --accent: #f0c050;
     --accent2: #e06848;
     --code-bg: #1a1a20;
+    --code-border: #28282f;
     --slide-max: 960px;
+    --topbar-border: #1e1e24;
+    --surface: #18181e;
+    --surface-hover: #22222a;
+    --surface-active: #2a2a34;
+    --nav-border: #2a2a32;
+    --nav-border-hover: #3a3a44;
+    --hint-fg: #3a3a42;
+    --hint-kbd-bg: #18181e;
+    --hint-kbd-border: #2a2a32;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--font-body);
     background: var(--bg);
     color: var(--fg);
     height: 100vh;
@@ -37,20 +52,20 @@
     padding: 14px 28px;
     font-size: 13px;
     color: var(--dim);
-    border-bottom: 1px solid #1e1e24;
+    border-bottom: 1px solid var(--topbar-border);
     flex-shrink: 0;
     user-select: none;
   }
   .topbar .title {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-display);
     font-size: 15px;
     color: var(--fg);
     letter-spacing: .02em;
   }
   .topbar .nav { display: flex; align-items: center; gap: 10px; }
   .topbar .nav button {
-    background: #18181e;
-    border: 1px solid #2a2a32;
+    background: var(--surface);
+    border: 1px solid var(--nav-border);
     color: var(--fg);
     width: 32px; height: 32px;
     border-radius: 8px;
@@ -61,8 +76,8 @@
     justify-content: center;
     transition: background .15s, border-color .15s;
   }
-  .topbar .nav button:hover { background: #22222a; border-color: #3a3a44; }
-  .topbar .nav button:active { background: #2a2a34; }
+  .topbar .nav button:hover { background: var(--surface-hover); border-color: var(--nav-border-hover); }
+  .topbar .nav button:active { background: var(--surface-active); }
   .topbar .counter {
     font-variant-numeric: tabular-nums;
     font-weight: 500;
@@ -96,7 +111,7 @@
     transform: translateY(0);
     pointer-events: auto;
   }
-  .slide.exit-up {
+  .slide.exit-up:not(.active) {
     opacity: 0;
     transform: translateY(-28px);
   }
@@ -112,7 +127,7 @@
   .status.error { color: var(--accent2); }
 
   .slide h1 {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-display);
     font-size: 52px;
     line-height: 1.12;
     font-weight: 400;
@@ -124,7 +139,7 @@
     background-clip: text;
   }
   .slide h2 {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-display);
     font-size: 36px;
     line-height: 1.2;
     font-weight: 400;
@@ -132,7 +147,7 @@
     color: var(--fg);
   }
   .slide h3 {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--font-body);
     font-size: 20px;
     font-weight: 600;
     text-transform: uppercase;
@@ -144,7 +159,7 @@
     font-size: 20px;
     line-height: 1.65;
     font-weight: 300;
-    color: #c4c1ba;
+    color: var(--body);
     margin-bottom: 16px;
   }
   .slide ul, .slide ol { padding-left: 24px; margin-bottom: 16px; }
@@ -152,24 +167,24 @@
     font-size: 19px;
     line-height: 1.6;
     font-weight: 300;
-    color: #c4c1ba;
+    color: var(--body);
     margin-bottom: 8px;
   }
   .slide li::marker { color: var(--accent); }
   .slide strong { font-weight: 600; color: var(--fg); }
   .slide em { font-style: italic; color: var(--accent); }
   .slide code {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     font-size: .85em;
     background: var(--code-bg);
     padding: 2px 7px;
     border-radius: 5px;
-    border: 1px solid #28282f;
+    border: 1px solid var(--code-border);
     color: var(--accent);
   }
   .slide pre {
     background: var(--code-bg);
-    border: 1px solid #28282f;
+    border: 1px solid var(--code-border);
     border-radius: 10px;
     padding: 20px 24px;
     margin-bottom: 18px;
@@ -181,7 +196,12 @@
     padding: 0;
     font-size: 15px;
     line-height: 1.6;
-    color: #c4c1ba;
+    color: var(--body);
+  }
+  /* Highlight.js: keep slide chrome tokens on the container; tokens color the spans */
+  .slide pre code.hljs {
+    background: transparent;
+    color: inherit;
   }
   .slide blockquote {
     border-left: 3px solid var(--accent);
@@ -196,7 +216,7 @@
     margin: 28px 0;
   }
 
-  .progress { height: 3px; background: #18181e; flex-shrink: 0; }
+  .progress { height: 3px; background: var(--surface); flex-shrink: 0; }
   .progress-inner {
     height: 100%;
     background: linear-gradient(90deg, var(--accent2), var(--accent));
@@ -212,19 +232,19 @@
 
   .hint {
     position: fixed; bottom: 18px; right: 24px;
-    font-size: 11px; color: #3a3a42; letter-spacing: .04em;
+    font-size: 11px; color: var(--hint-fg); letter-spacing: .04em;
   }
   .hint kbd {
-    display: inline-block; background: #18181e; border: 1px solid #2a2a32;
+    display: inline-block; background: var(--hint-kbd-bg); border: 1px solid var(--hint-kbd-border);
     border-radius: 4px; padding: 1px 6px;
-    font-family: 'JetBrains Mono', monospace; font-size: 10px; margin: 0 1px;
+    font-family: var(--font-mono); font-size: 10px; margin: 0 1px;
   }
 </style>
 </head>
 <body>
 <div class="grain"></div>
 <div class="topbar">
-  <div class="title">Project Overview</div>
+  <div class="title" id="deck-title">Project Overview</div>
   <div class="nav">
     <button onclick="navigate(-1)" aria-label="Previous">&#8249;</button>
     <div class="counter"><span id="cur">1</span> / <span id="total">0</span></div>
@@ -235,29 +255,214 @@
 <div class="progress"><div class="progress-inner" id="progress"></div></div>
 <div class="hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js" crossorigin="anonymous"></script>
 <script>
 const SLIDES_DIR = '.slides/';
 const SLIDES_EXT = '.md';
+const CONFIG_BASENAME = '00-configuration.md';
+/** Frontmatter keys (other than title / styles) map to CSS custom properties. Use kebab-case (e.g. code-bg). Quote hex colors in YAML. */
+const FRONTMATTER_STYLE_KEYS = new Set([
+  'font-display', 'font-body', 'font-mono',
+  'bg', 'fg', 'dim', 'body', 'accent', 'accent2',
+  'code-bg', 'code-border', 'slide-max',
+  'topbar-border', 'surface', 'surface-hover', 'surface-active',
+  'nav-border', 'nav-border-hover',
+  'hint-fg', 'hint-kbd-bg', 'hint-kbd-border'
+]);
+
+/** Persists last viewed slide (0-based index) across refresh; keyed by path so multiple decks on one origin stay separate. */
+const LAST_SLIDE_STORAGE_KEY = 'glides:lastSlideIndex:' + (location.pathname || '/');
 const stage = document.getElementById('stage');
 const curEl = document.getElementById('cur');
 const totalEl = document.getElementById('total');
 const progressEl = document.getElementById('progress');
+const deckTitleEl = document.getElementById('deck-title');
 let slidesRaw = [];
 let current = 0;
+
+function readSavedSlideIndex() {
+  try {
+    const raw = localStorage.getItem(LAST_SLIDE_STORAGE_KEY);
+    if (raw == null) return null;
+    const n = parseInt(raw, 10);
+    return Number.isFinite(n) ? n : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function persistSlideIndex() {
+  if (slidesRaw.length === 0) return;
+  try {
+    localStorage.setItem(LAST_SLIDE_STORAGE_KEY, String(current));
+  } catch (e) { /* quota / private mode */ }
+}
 
 function setStatus(message, isError) {
   stage.innerHTML = '<div class="status' + (isError ? ' error' : '') + '">' + message + '</div>';
 }
 
+function basenameFromPath(path) {
+  const p = path.replace(/\\/g, '/');
+  const i = p.lastIndexOf('/');
+  return i >= 0 ? p.slice(i + 1) : p;
+}
+
+function isConfigSlidePath(path) {
+  return basenameFromPath(path).toLowerCase() === CONFIG_BASENAME;
+}
+
+function stripYamlQuotes(value) {
+  if (value.length >= 2) {
+    const a = value[0];
+    const b = value[value.length - 1];
+    if ((a === '"' && b === '"') || (a === "'" && b === "'")) {
+      return value.slice(1, -1);
+    }
+  }
+  return value;
+}
+
+/** Split first YAML frontmatter block; returns { meta: string|null, body: string }. */
+function splitFrontmatter(raw) {
+  const lines = raw.split('\n');
+  if (lines.length === 0 || lines[0].trim() !== '---') {
+    return { meta: null, body: raw };
+  }
+  let end = -1;
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim() === '---') {
+      end = i;
+      break;
+    }
+  }
+  if (end < 0) {
+    return { meta: null, body: raw };
+  }
+  const meta = lines.slice(1, end).join('\n');
+  const body = lines.slice(end + 1).join('\n').replace(/^\n+/, '');
+  return { meta, body };
+}
+
+/** Parse flat YAML-ish lines; supports nested `styles:` with indented key: value rows. */
+function parseFrontmatterYaml(block) {
+  const out = {};
+  const lines = block.split('\n');
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    if (trimmed === '' || trimmed.startsWith('#')) {
+      i++;
+      continue;
+    }
+    if (/^styles:\s*$/.test(trimmed)) {
+      i++;
+      while (i < lines.length && /^\s{2,}/.test(lines[i]) && /:/.test(lines[i])) {
+        const sub = lines[i].replace(/^\s+/, '');
+        const colon = sub.indexOf(':');
+        if (colon > 0) {
+          const k = sub.slice(0, colon).trim();
+          let v = sub.slice(colon + 1).trim();
+          v = stripYamlQuotes(v);
+          if (k) out[k] = v;
+        }
+        i++;
+      }
+      continue;
+    }
+    const colon = line.indexOf(':');
+    if (colon > 0) {
+      const k = line.slice(0, colon).trim();
+      let v = line.slice(colon + 1).trim();
+      if (k === 'styles') {
+        i++;
+        continue;
+      }
+      v = stripYamlQuotes(v);
+      if (k) out[k] = v;
+    }
+    i++;
+  }
+  return out;
+}
+
+function applyDeckMeta(meta) {
+  if (!meta || typeof meta !== 'object') return;
+  const root = document.documentElement;
+  if (meta.title != null && String(meta.title).length) {
+    const t = String(meta.title);
+    document.title = t;
+    deckTitleEl.textContent = t;
+  }
+  for (const key of Object.keys(meta)) {
+    if (key === 'title') continue;
+    if (FRONTMATTER_STYLE_KEYS.has(key)) {
+      const val = meta[key];
+      if (val != null && String(val).length) {
+        root.style.setProperty('--' + key, String(val));
+      }
+    }
+  }
+}
+
+/** Build slide markdown strings and apply 00-configuration frontmatter. */
+function processLoadedEntries(entries) {
+  slidesRaw = [];
+  for (let e = 0; e < entries.length; e++) {
+    const { path, text } = entries[e];
+    if (isConfigSlidePath(path)) {
+      const { meta, body } = splitFrontmatter(text);
+      if (meta != null) {
+        try {
+          applyDeckMeta(parseFrontmatterYaml(meta));
+        } catch (err) {
+          console.warn('Frontmatter parse failed for ' + path, err);
+        }
+        slidesRaw.push(body);
+      } else {
+        slidesRaw.push(text);
+      }
+    } else {
+      slidesRaw.push(text);
+    }
+  }
+}
+
 function normalizeSlidePath(href) {
   if (!href) return null;
-  const cleaned = href.split('#')[0].split('?')[0];
+  let cleaned = href.split('#')[0].split('?')[0];
   if (!cleaned || cleaned === '../' || cleaned.endsWith('/')) return null;
+  try {
+    cleaned = decodeURIComponent(cleaned);
+  } catch (e) {
+    return null;
+  }
+  cleaned = cleaned.replace(/\\/g, '/').replace(/\/+/g, '/');
+  cleaned = cleaned.replace(/^(\.\/)+/, '');
   if (!cleaned.toLowerCase().endsWith(SLIDES_EXT)) return null;
   if (/^(https?:)?\/\//i.test(cleaned)) return null;
+
+  const lower = cleaned.toLowerCase();
+  const dir = SLIDES_DIR;
+  if (lower.startsWith(dir.toLowerCase())) {
+    return dir + cleaned.slice(dir.length).replace(/^\/+/, '');
+  }
+  if (lower.startsWith('/' + dir.toLowerCase())) {
+    return dir + cleaned.slice(('/' + dir).length).replace(/^\/+/, '');
+  }
+  if (lower.startsWith('slides/')) {
+    return dir + cleaned.slice('slides/'.length);
+  }
+  if (lower.startsWith('/slides/')) {
+    return dir + cleaned.slice('/slides/'.length);
+  }
   if (cleaned.startsWith('/')) return cleaned;
-  if (cleaned.startsWith(SLIDES_DIR)) return cleaned;
-  return SLIDES_DIR + cleaned.replace(/^\.?\//, '');
+  if (!cleaned.includes('/')) {
+    return dir + cleaned;
+  }
+
+  return dir + cleaned.replace(/^\.?\//, '');
 }
 
 function slideSort(a, b) {
@@ -293,16 +498,47 @@ async function discoverSlideFiles() {
   throw new Error('No slides found. Ensure .slides/ is served with directory listing or add .slides/slides.json.');
 }
 
-async function loadSlides() {
+async function loadSlideEntries() {
   const files = await discoverSlideFiles();
-  const markdown = await Promise.all(
-    files.map(async (file) => {
-      const res = await fetch(file, { cache: 'no-store' });
-      if (!res.ok) throw new Error('Failed to load ' + file);
-      return res.text();
+  const entries = await Promise.all(
+    files.map(async (path) => {
+      const res = await fetch(path, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to load ' + path);
+      return { path, text: await res.text() };
     })
   );
-  return markdown;
+  return entries;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function safeLangClass(lang) {
+  return String(lang).replace(/[^a-z0-9_-]/gi, '');
+}
+
+/** Fenced code: syntax highlight when language is known (Highlight.js); else auto-detect or plain escape. */
+function formatFencedCodeBlock(code, langRaw) {
+  const esc = escHtml;
+  const lang = (langRaw || '').trim().toLowerCase();
+  if (typeof hljs === 'undefined') {
+    return '<pre><code>' + esc(code) + '</code></pre>';
+  }
+  if (lang && hljs.getLanguage(lang)) {
+    try {
+      const { value } = hljs.highlight(code, { language: lang, ignoreIllegals: true });
+      const cls = safeLangClass(lang);
+      return '<pre><code class="hljs language-' + cls + '">' + value + '</code></pre>';
+    } catch (e) { /* fall through */ }
+  }
+  try {
+    const { value, language } = hljs.highlightAuto(code);
+    const extra = language ? ' language-' + safeLangClass(language) : '';
+    return '<pre><code class="hljs' + extra + '">' + value + '</code></pre>';
+  } catch (e) {
+    return '<pre><code>' + esc(code) + '</code></pre>';
+  }
 }
 
 // ── Tiny markdown → HTML parser ──
@@ -310,7 +546,7 @@ function md(src) {
   let html = '';
   const lines = src.split('\n');
   let i = 0;
-  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const esc = escHtml;
   const inline = s => {
     s = esc(s);
     s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
@@ -324,12 +560,18 @@ function md(src) {
     const line = lines[i];
     if (line.trim() === '') { i++; continue; }
 
-    // Fenced code block
+    // Fenced code block (optional info string: ```javascript, ```python, etc.)
     if (line.trim().startsWith('```')) {
-      let code = ''; i++;
-      while (i < lines.length && !lines[i].trim().startsWith('```')) { code += esc(lines[i]) + '\n'; i++; }
+      const open = line.trim().slice(3).trim();
+      const fenceLang = open ? open.split(/\s+/)[0] : '';
+      let code = '';
       i++;
-      html += '<pre><code>' + code.trimEnd() + '</code></pre>';
+      while (i < lines.length && !lines[i].trim().startsWith('```')) {
+        code += lines[i] + '\n';
+        i++;
+      }
+      i++;
+      html += formatFencedCodeBlock(code.trimEnd(), fenceLang);
       continue;
     }
 
@@ -395,6 +637,20 @@ function renderSlides() {
   });
 }
 
+/** Restore saved slide after render; no transition (avoids flash). */
+function applySavedSlideIndex() {
+  const saved = readSavedSlideIndex();
+  if (saved == null || slidesRaw.length === 0) return;
+  const idx = Math.max(0, Math.min(saved, slidesRaw.length - 1));
+  if (idx === current) return;
+  const els = stage.querySelectorAll('.slide');
+  if (!els.length || !els[current] || !els[idx]) return;
+  els[current].classList.remove('active');
+  current = idx;
+  els[current].classList.add('active');
+  els.forEach((el) => el.classList.remove('exit-up'));
+}
+
 function navigate(dir) {
   if (slidesRaw.length === 0) return;
   const next = current + dir;
@@ -402,11 +658,13 @@ function navigate(dir) {
   const els = stage.querySelectorAll('.slide');
   const prev = current;
   els[prev].classList.remove('active');
-  els[prev].classList.add(dir > 0 ? 'exit-up' : '');
+  if (dir > 0) els[prev].classList.add('exit-up');
   setTimeout(() => els[prev].classList.remove('exit-up'), 450);
   current = next;
+  els[current].classList.remove('exit-up');
   els[current].classList.add('active');
   updateUI();
+  persistSlideIndex();
 }
 
 function updateUI() {
@@ -431,11 +689,15 @@ stage.addEventListener('click', e => {
 async function boot() {
   setStatus('Loading slides...', false);
   try {
-    slidesRaw = await loadSlides();
-    if (slidesRaw.length === 0) throw new Error('No slides found in .slides/.');
+    const entries = await loadSlideEntries();
+    if (entries.length === 0) throw new Error('No slides found in .slides/.');
     current = 0;
+    processLoadedEntries(entries);
+    if (slidesRaw.length === 0) throw new Error('No slides found in .slides/.');
     renderSlides();
+    applySavedSlideIndex();
     updateUI();
+    persistSlideIndex();
   } catch (err) {
     const help = window.location.protocol === 'file:'
       ? ' Open this deck through a local web server (for example: python3 -m http.server).'
