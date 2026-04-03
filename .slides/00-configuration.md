@@ -6,7 +6,7 @@ styles:
   fg: '#d4d4d4'
   dim: '#858585'
   body: '#b3b3b3'
-  accent: '#c9a3ff'
+  accent: '#f54e00'
   accent2: '#ff6b6b'
   link: '#6db3ff'
   link-hover: '#9cceff'
