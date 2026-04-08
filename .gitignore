@@ -1,0 +1,6 @@
+# Ignore runtime artifacts
+.data/
+
+# Ignore other AI agents
+.claude/
+.gemini/
