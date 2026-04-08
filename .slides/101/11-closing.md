@@ -1,12 +1,12 @@
 ---
 
-![](.slides/assets/customer-logo.png)
+![](../.slides/assets/customer-logo.png)
 
 ## with
 
-![](.slides/assets/cheating for spacing oopsie)
+![](../.slides/assets/cheating for spacing oopsie)
 
-![](.slides/assets/cursor-logo.png)
+![](../.slides/assets/cursor-logo.png)
 
 ---
 

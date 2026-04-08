@@ -24,7 +24,7 @@ styles:
   hint-kbd-border: '#3c3c3c'
 ---
 
-![](.slides/assets/cursor-lockup-horiz.png)
+![](../.slides/assets/cursor-lockup-horiz.png)
 
 ### The best way to code with AI
 
