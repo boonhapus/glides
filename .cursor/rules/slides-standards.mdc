@@ -1,0 +1,13 @@
+---
+globs: *.md
+alwaysApply: false
+---
+
+1. Header should never span more than 1 line.
+2. Subheaders should succinctly describe the idea.
+3. Use three or fewer bullets to present the topic.
+4. If there is an author for a quote, you must **bold** their name.
+
+NEVER use the em dash (—).
+
+For tone and voice, check [AGENTS.md](.agents/AGENTS.md).
