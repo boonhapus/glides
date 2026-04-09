@@ -1,5 +1,6 @@
 ---
-globs: *.md
+description: Slide writing standards for markdown files in .slides
+globs: .slides/**/*.{md,mdx,markdown,mdc}
 alwaysApply: false
 ---
 
