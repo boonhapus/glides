@@ -1,3 +1,4 @@
+import datetime as dt
 import os
 import pathlib
 import subprocess as sp
@@ -27,11 +28,12 @@ def main() -> int:
     assert CURSOR_PROJECT_DIR is not None, "env `CURSOR_PROJECT_DIR` was not inherited!"
 
     base_dir = pathlib.Path(CURSOR_PROJECT_DIR)
+    now = dt.datetime.now()
 
     log_directory = base_dir / ".data" / "hook_state"
     log_directory.mkdir(parents=True, exist_ok=True)
 
-    log_file = log_directory / "stop_slides_lint.stdout.log"
+    log_file = log_directory / f"{now:%H-%M}-stop_slides_lint.stdout.log"
 
     child_stdout = _run_repo_health_check(base_dir)
     log_file.write_text(child_stdout, encoding="utf-8")
