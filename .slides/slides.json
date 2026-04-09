@@ -1,14 +1,15 @@
 [
-  "101/00-configuration.md",
-  "101/01-ethos.md",
-  "101/02-decision-criteria.md",
-  "101/03-modes-overview.md",
-  "101/04-ask.md",
-  "101/05-plan.md",
-  "101/06-agent.md",
-  "101/07-debug.md",
-  "101/08-workflow.md",
-  "101/09-cheatsheet-shortcuts.md",
-  "101/10-cheatsheet-models.md",
-  "101/11-closing.md"
+  "201/00-configuration.md",
+  "201/01-agent-mode.md",
+  "201/02-context-window.md",
+  "201/03-context-rot.md",
+  "201/04-context-mgmt-tools.md",
+  "201/05-rules.md",
+  "201/06-skills.md",
+  "201/07-commands.md",
+  "201/08-sub-agents.md",
+  "201/09-hooks.md",
+  "201/10-mcp.md",
+  "201/11-surfaces.md",
+  "201/12-closing.md"
 ]

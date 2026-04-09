@@ -1,4 +1,15 @@
 [
   "201/00-configuration.md",
-  "201/01-tools.md"
+  "201/01-agent-mode.md",
+  "201/02-context-window.md",
+  "201/03-context-rot.md",
+  "201/04-context-mgmt-tools.md",
+  "201/05-rules.md",
+  "201/06-skills.md",
+  "201/07-commands.md",
+  "201/08-sub-agents.md",
+  "201/09-hooks.md",
+  "201/10-mcp.md",
+  "201/11-surfaces.md",
+  "201/12-closing.md"
 ]
