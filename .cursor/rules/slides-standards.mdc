@@ -9,6 +9,7 @@ alwaysApply: false
 3. Use three or fewer bullets to present the topic.
 4. If there is an author for a quote, you must **bold** their name.
 
+NEVER put a colon (:) in the header, unless it has incredibly high impact.
 NEVER use the em dash (—).
 
 For tone and voice, check [AGENTS.md](.agents/AGENTS.md).
