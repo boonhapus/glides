@@ -1,9 +1,9 @@
 # Context Window
 
-### Short-term memory for this request: chat, files, tool output, and injected rules
+### "Short-term memory" for a single conversation
 
-- **Tokens** (about ¾ of a word each) measure size; **everything you see in the thread** shares one budget
-- **Hard limit**: when full, older content falls away or the request may fail
-- **Turn by turn**: rules and other always-on text often ride along **every** message, so lean text beats long boilerplate
+- Every message you send - plus instructions and files - occupies **the same attention**.
+- Long chats lead to **attention drift**, where agents struggle to weigh new information.
+- Keeping threads focused on a single goal to prevent "distraction".
 
-New chats start fresh by design; **durable truth** lives in files you commit, not in yesterday's transcript.
+When your agents gets brain fog, go `Ctrl + Shift + L` (New Chat Tab).

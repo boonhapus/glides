@@ -1,11 +1,13 @@
 # Skills
 
-### Optional playbooks: deep context **only when relevant**
+### On-demand procedural knowledge
 
-Skills live under `.agents/SKILLS/<name>/SKILL.md`.
+- Loaded into context conditionally, based on model discretion
+- Give agents **domain expertise** and **new capabilities** outside of core training data 
+- Balance specificity with brevity, **give concrete examples** instead of abstraction
 
-- **Not loaded** until needed: **no token cost** sitting idle
-- **If always-on or over-broad**: same bloat risk as fat rules
-- **Use for**: long how-tos, API cheat sheets, architecture narratives
+`.cursor/skills/<name>/SKILL.md`, `.agents/SKILLS/<name>/SKILL.md`
 
 [Skills](https://cursor.com/docs/skills) →
+
+[Agent Skills standard](https://agentskills.io/what-are-skills) →

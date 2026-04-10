@@ -1,9 +1,9 @@
 # Context Rot
 
-### Long threads get noisy; quality drops before you notice
+### Attention weight shifts from "The Goal" to "The Noise"
 
-- Early instructions lose salience as new messages and tool results pile up
-- Contradictions creep in; the model may favor the latest messy paste over your original intent
-- **You repeat yourself** in chat and burn tokens fixing drift instead of shipping
+- **Focus is a finite resource**; goals get pushed out as the chat fills with new data.
+- **Contradictions creep in**; favoring the latest messy paste over your original intent.
+- **You repeat yourself** in chat and burn tokens fixing drift instead of shipping.
 
-When the thread feels mushy, **start fresh** or **move detail** into rules, skills, or focused subagent tasks.
+How do you persist essential details without diluting short term memory?

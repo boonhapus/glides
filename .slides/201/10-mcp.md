@@ -1,11 +1,11 @@
-# MCP
+# MCP - Model Context Protocol
 
-### Tools and data from outside flow back **into** the window
+### Connect to external tools and data sources
 
-MCP connects other systems so the agent can **call out** and read results into the Agent loop.
+Agent communication with other systems - it's an API for AIs.
 
-- **Enables**: live data without manual copy-paste; fewer giant static dumps in rules
-- **Risk**: one huge JSON or error blob can chew a big slice of context in a single turn
-- **Best practice**: narrow queries, cap rows, prefer summaries; remember **localhost** servers behave differently in cloud agents
+- Communication happens over streaming HTTP or server sent events
+- Reference resources (data) and vendor-specific instructions (prompts) remotely
+- Delegate the implementation of interacting with a 3rd party from the Agent
 
 [MCP](https://cursor.com/docs/context/mcp) →

@@ -1,11 +1,13 @@
 # Subagents
 
-### Separate windows for parallel or overflow work
+### Separate context that the main agent can delgate to
 
 Subagents are **independent agent runs**, each with its **own** context budget.
 
-- **Use for**: exploration, refactors, or research that would crowd your main chat
-- **Parent sees the return**: summaries are cheap; pasting raw logs back **inflates the parent window**
-- **Anti-pattern**: treat them as dump trucks for huge files without summarizing first
+- **Use for**: parallelization, context isolation, model flexibility, cost efficiency
+- The parent context **only sees the return summary**, not the entire underylying context
+- **Built-in Subagents**: codebase `explore`, terminal and `browser` usage
+
+`.cursor/agents`
 
 [Subagents](https://cursor.com/docs/context/subagents) →

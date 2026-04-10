@@ -1,13 +1,16 @@
-# Your harness in the repo
-
-### Load different **amounts** of context per feature
+# Context harnessing
 
 ```bash
 .cursor/
 ├── rules/
 │   └── coding-standards.mdc
+├── skills/
+│   └── code-reviewer/
+│       └── SKILL.mdc
 ├── commands/
 │   └── code-review.md
+├── agents/
+│   └── code-reviewer.mdc
 ├── hooks/
 │   ├── check-format.sh
 │   ├── fix-format.py
@@ -18,5 +21,5 @@
 ├── AGENTS.md
 └── SKILLS/
     └── code-reviewer/
-        └── SKILL.md
+        └── SKILL.mdc
 ```

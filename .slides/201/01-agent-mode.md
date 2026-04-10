@@ -1,11 +1,11 @@
-# Agent Mode
+# Agent Mode Friction
 
-### More autonomy is great when the model sees the right slice of your project
+### Autonomy fails when agents **drift from your intent**
 
-You might wonder why an early detail vanished, why you keep pasting the same standards, or how to stop a risky edit.
+A high-functioning agent can still lose the plot. You might see it..
 
-- **The window is the whole story**: if it is not in context, the model cannot bank on it
-- **Make guidance durable**: rules, skills, commands, and repo layout beat long lectures in chat
-- **Add mechanical guardrails**: permissions, hooks, and tight prompts steer what runs
+- ..attempt to push code that bypasses local linting or security checks.
+- ..modify a CSS file directly, unaware that the project uses a pre-processor.
+- ..updates a value by assignment - it missed that state **must** go through dispatch.
 
-**Managing the context window** is how you stay kind to yourself and consistent in the codebase.
+Engineering the context tethers the agent to your project's DNA, not just its training.

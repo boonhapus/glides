@@ -1,6 +1,15 @@
-# Harnesses are Local and Cloud
+# Multiple Surfaces, same harness
 
-### Same mental model: **guardrails in git**, **tools where they run**
+### Run rules, skills, and subagents **Local** or in the **Cloud**
 
-- **Travels with the repo**: rules, commands, skill definitions, and hook configs describe **how you want work done**
-- **Runs where the agent runs**: scripts, MCP hosts, and network reachability must be set up on **that** machine or sandbox
+---
+
+**Context Control**: Manage context window hygiene and rotation to prevent logic decay and maximize reasoning efficiency.
+
+---
+
+**Skill Composability**: Decouples core commands and MCP integrations from the model, allowing for conditional tools and subagents.
+
+---
+
+**Operational Rigor**: Enforces behavior through pre-defined rules and lifecycle hooks, ensuring safety across every surface.

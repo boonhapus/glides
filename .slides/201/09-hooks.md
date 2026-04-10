@@ -1,11 +1,13 @@
 # Hooks
 
-### Run commands or inject prompts during the Agent loop
+### Run commands or prompts during the Agent loop
 
-Hooks (`.cursor/hooks` , `.git/hooks`) run on editor or agent lifecycle events you configure.
+Observe, control, and extend the agent loop using custom scripts.
 
-- **Upside**: enforce checks, attach snippets, or steer behavior **before** the model spends turns recovering
-- **Risk**: chatty hooks prepend a wall of text **every** time; you pay before the first real answer
-- **Design for budget**: small payloads, summarize diffs, avoid streaming megabytes on trivial events
+- Guardrail taste and accuracy by calling linters, formatters, and tests on `stop`.
+- Reject tool use by blocking shell commands like `rm -rf`,  `chown`, or `chmod`.
+- Detect directly access to secrets like `cat .env` and prompt to use secret store.
+
+`.cursor/hooks`, `.git/hooks`
 
 [Hooks](https://cursor.com/docs/agent/hooks) →
